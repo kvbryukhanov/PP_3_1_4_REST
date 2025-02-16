@@ -16,7 +16,8 @@ public class Role implements GrantedAuthority {
     @Column(nullable = false, unique = true)
     private String name; // Например, "ROLE_USER", "ROLE_ADMIN"
 
-    public Role() {}
+    public Role() {
+    }
 
     public Role(String name) {
         this.name = name;

@@ -1,15 +1,14 @@
 package ru.kata.spring.boot_security.demo.DAO;
 
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+import ru.kata.spring.boot_security.demo.model.User;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import ru.kata.spring.boot_security.demo.model.User;
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -53,13 +52,13 @@ public class UserDaoImpl implements UserDao {
         }
     }
 
+    @Override
     public Optional<User> findUserByUsername(String username) {
         TypedQuery<User> query = entityManager.createQuery(
                 "SELECT u FROM User u WHERE u.username = :username", User.class);
         query.setParameter("username", username);
-        User user = query.getSingleResult();
-        //System.out.println(user);
-        return Optional.of(user);
+        List<User> result = query.getResultList();
+        return result.isEmpty() ? Optional.empty() : Optional.of(result.get(0));
     }
 
     @Override

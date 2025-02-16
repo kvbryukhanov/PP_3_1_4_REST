@@ -15,19 +15,10 @@
 </div>
 
 <br>
-<a th:href="@{/admin/edit(id=${user.id})}">Edit</a>
 <br>
 
-<br>
-<form th:method="post" th:action="@{/admin/delete}">
-    <input type="hidden" name="id" th:value="${user.id}"/>
-    <input type="submit" value="Delete"/>
-</form>
-<br>
+<a href="/logout">Logout </a>
 
-<br>
-<a href="/admin/index">Main</a>
-<br>
 
 </body>
 </html>
