@@ -19,32 +19,33 @@ public class UserDaoImpl implements UserDao {
     @PersistenceContext
     private EntityManager entityManager;
 
-    @Transactional(readOnly = true)
     @Override
     public List<User> index() {
         return entityManager.createQuery("from User", User.class).getResultList();
     }
 
-    @Transactional(readOnly = true)
+
     @Override
+    @Transactional(readOnly = true)
     public User show(int id) {
         return entityManager.find(User.class, id);
     }
 
-    @Transactional
     @Override
+    @Transactional
     public void save(User user) {
         entityManager.persist(user);
     }
 
-    @Transactional
+
     @Override
+    @Transactional
     public void update(int id, User user) {
         entityManager.merge(user);
     }
 
-    @Transactional
     @Override
+    @Transactional
     public void delete(int id) {
         User user = entityManager.find(User.class, id);
         if (user != null) {
@@ -53,6 +54,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Optional<User> findUserByUsername(String username) {
         TypedQuery<User> query = entityManager.createQuery(
                 "SELECT u FROM User u WHERE u.username = :username", User.class);
@@ -62,7 +64,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         if (findUserByUsername(username).isPresent()) {
             User user = findUserByUsername(username).get();
