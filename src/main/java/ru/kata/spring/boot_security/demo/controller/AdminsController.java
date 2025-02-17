@@ -1,8 +1,8 @@
 package ru.kata.spring.boot_security.demo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +12,7 @@ import ru.kata.spring.boot_security.demo.service.RoleService;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -22,57 +23,44 @@ public class AdminsController {
 
     private final UserService userService;
     private final RoleService roleService;
-    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    AdminsController(UserService userService, RoleService roleService, PasswordEncoder passwordEncoder) {
+    AdminsController(UserService userService, RoleService roleService) {
         this.userService = userService;
         this.roleService = roleService;
-        this.passwordEncoder = passwordEncoder;
     }
 
-    @GetMapping(value = "/")
-    public String showAll(ModelMap model) {
+    @GetMapping
+    public String adminPanel(Model model, Principal principal) {
+        User currentUser = userService.findUserByUsername(principal.getName()).get();
         model.addAttribute("users", userService.index());
-        return "index";
-    }
-
-    @GetMapping(value = "/show")
-    public String showOne(ModelMap model, @RequestParam int id) {
-        model.addAttribute("user", userService.show(id));
-        model.addAttribute("roles", userService.show(id).getRoles());
-        return "show";
-    }
-
-    @GetMapping(value = "/create")
-    public String create(ModelMap model) {
-        model.addAttribute("user", new User());
         model.addAttribute("allRoles", roleService.getAllRoles());
-        return "create";
+        model.addAttribute("user", currentUser);
+        model.addAttribute("newUser", new User());
+        return "admin";
     }
 
     @PostMapping("/create")
     public String save(@ModelAttribute("user") @Valid User user,
                        BindingResult bindingResult,
                        @RequestParam("roleIds") List<Long> roleIds,
-                       ModelMap model) {
+                       Model model) {
         if (bindingResult.hasErrors()) {
-            model.addAttribute("allRoles", roleService.getAllRoles());
-            return "create";
+            model.addAttribute("allRoles", roleService.getAllRoles()); // Добавляем роли в модель
+            model.addAttribute("users", userService.index()); // Добавляем пользователей в модель
+            model.addAttribute("newUser", user); // Сохраняем введённые данные пользователя
+            model.addAttribute("activeTab", "newUser"); // Указываем активную вкладку
+            return "admin"; // Возвращаем представление admin.html
         }
-
 
         Set<Role> roles = new HashSet<>(roleService.findByIds(roleIds)); // Должен быть метод в сервисе
         user.setRoles(roles);
         userService.save(user);
-        return "redirect:/admin/";
-    }
-
-    @GetMapping(value = "/edit")
-    public String edit(ModelMap model, @RequestParam int id) {
-        model.addAttribute("user", userService.show(id));
-        model.addAttribute("allRoles", roleService.getAllRoles());
-        return "edit";
+        model.addAttribute("allRoles", roleService.getAllRoles()); // Добавляем роли в модель
+        model.addAttribute("users", userService.index()); // Добавляем пользователей в модель
+        model.addAttribute("newUser", user); // Сохраняем введённые данные пользователя
+        model.addAttribute("activeTab", "newUser");
+        return "redirect:/admin"; // Редирект на страницу админ-панели
     }
 
     @PostMapping("/update")
@@ -84,7 +72,7 @@ public class AdminsController {
                          List<Long> roleIds) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("allRoles", roleService.getAllRoles());
-            return "edit";
+            return "admin";
         }
 
         User existingUser = userService.show(id);
@@ -99,12 +87,12 @@ public class AdminsController {
         }
 
         userService.update(id, user);
-        return "redirect:/admin/show?id=" + id;
+        return "redirect:/admin";
     }
 
     @PostMapping(value = "/delete")
     public String delete(@RequestParam int id) {
         userService.delete(id);
-        return "redirect:/admin/";
+        return "redirect:/admin";
     }
 }
