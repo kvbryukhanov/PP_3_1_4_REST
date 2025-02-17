@@ -31,7 +31,7 @@ public class AdminsController {
         this.passwordEncoder = passwordEncoder;
     }
 
-    @GetMapping(value = "/index")
+    @GetMapping(value = "/")
     public String showAll(ModelMap model) {
         model.addAttribute("users", userService.index());
         return "index";
@@ -65,7 +65,7 @@ public class AdminsController {
         Set<Role> roles = new HashSet<>(roleService.findByIds(roleIds)); // Должен быть метод в сервисе
         user.setRoles(roles);
         userService.save(user);
-        return "redirect:/admin/index";
+        return "redirect:/admin/";
     }
 
     @GetMapping(value = "/edit")
@@ -105,6 +105,6 @@ public class AdminsController {
     @PostMapping(value = "/delete")
     public String delete(@RequestParam int id) {
         userService.delete(id);
-        return "redirect:/admin/index";
+        return "redirect:/admin/";
     }
 }

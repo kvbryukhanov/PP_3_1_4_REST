@@ -22,7 +22,7 @@ public class UsersController {
         this.userService = userService;
     }
 
-    @GetMapping(value = "/my_page")
+    @GetMapping
     public String showOne(ModelMap model, Principal principal) {
         Optional<User> user = userService.findUserByUsername(principal.getName());
         if (user.isPresent()) {
