@@ -8,6 +8,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
 @Configuration
@@ -28,16 +30,22 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/").denyAll() // Запретить доступ к корневому URL
-                .antMatchers("/admin/**").hasRole("ADMIN") // Доступ только для администраторов
-                .antMatchers("/user/**").hasRole("USER") // Доступ только для пользователей
+                .antMatchers("/").denyAll()
+                .antMatchers("/admin/**").hasRole("ADMIN")
+                .antMatchers("/user/**").hasRole("USER")
+                .antMatchers("/login").permitAll()
                 .and()
                 .formLogin()
+                //.loginPage("/login")
+                //.loginProcessingUrl("/process_login")
+                //.successForwardUrl("/success")
                 .successHandler(successUserHandler)
-                .permitAll() // Разрешить всем доступ к странице входа
+                .permitAll()
                 .and()
                 .logout()
-                .permitAll(); // Разрешить всем доступ к выходу
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/login?logout")
+                .permitAll();
     }
 
     @Bean
