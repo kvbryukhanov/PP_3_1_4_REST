@@ -13,7 +13,9 @@ public interface UserService extends UserDetailsService {
 
     void save(User user);
 
-    void update(int id, ru.kata.spring.boot_security.demo.model.User user);
+    void save(User user, List<Long> roleIds);
+
+    void update(int id, ru.kata.spring.boot_security.demo.model.User user, List<Long> roleIds);
 
     void delete(int id);
 

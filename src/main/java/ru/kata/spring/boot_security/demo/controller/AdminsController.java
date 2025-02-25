@@ -6,16 +6,13 @@ import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.RoleService;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
 import javax.validation.Valid;
 import java.security.Principal;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Controller
 @RequestMapping("/admin")
@@ -43,50 +40,26 @@ public class AdminsController {
     @PostMapping("/create")
     public String save(@ModelAttribute("user") @Valid User user,
                        BindingResult bindingResult,
-                       @RequestParam("roleIds") List<Long> roleIds,
-                       Model model) {
+                       @RequestParam("roleIds") List<Long> roleIds) {
         if (bindingResult.hasErrors()) {
-            model.addAttribute("allRoles", roleService.getAllRoles()); // Добавляем роли в модель
-            model.addAttribute("users", userService.index()); // Добавляем пользователей в модель
-            model.addAttribute("newUser", user); // Сохраняем введённые данные пользователя
-            model.addAttribute("activeTab", "newUser"); // Указываем активную вкладку
-            return "admin"; // Возвращаем представление admin.html
+            return "redirect:/admin";
         }
 
-        Set<Role> roles = new HashSet<>(roleService.findByIds(roleIds)); // Должен быть метод в сервисе
-        user.setRoles(roles);
-        userService.save(user);
-        model.addAttribute("allRoles", roleService.getAllRoles()); // Добавляем роли в модель
-        model.addAttribute("users", userService.index()); // Добавляем пользователей в модель
-        model.addAttribute("newUser", user); // Сохраняем введённые данные пользователя
-        model.addAttribute("activeTab", "newUser");
+        userService.save(user, roleIds);
         return "redirect:/admin"; // Редирект на страницу админ-панели
     }
 
     @PostMapping("/update")
     public String update(@ModelAttribute("user") @Valid User user,
                          BindingResult bindingResult,
-                         ModelMap model,
                          @RequestParam int id,
                          @RequestParam(value = "roleIds", required = false)
                          List<Long> roleIds) {
         if (bindingResult.hasErrors()) {
-            model.addAttribute("allRoles", roleService.getAllRoles());
-            return "admin";
+            return "redirect:/admin";
         }
 
-        User existingUser = userService.show(id);
-
-        user.setPassword(userService.encodePassword(user.getPassword()));
-
-        if (roleIds != null) {
-            Set<Role> roles = new HashSet<>(roleService.findByIds(roleIds));
-            user.setRoles(roles);
-        } else {
-            user.setRoles(existingUser.getRoles());
-        }
-
-        userService.update(id, user);
+        userService.update(id, user, roleIds);
         return "redirect:/admin";
     }
 

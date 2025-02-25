@@ -14,7 +14,7 @@ public class Role implements GrantedAuthority {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private String name; // Например, "ROLE_USER", "ROLE_ADMIN"
+    private String name;
 
     public Role() {
     }
@@ -59,6 +59,6 @@ public class Role implements GrantedAuthority {
 
     @Override
     public String toString() {
-        return name;
+        return name.split("_")[1];
     }
 }

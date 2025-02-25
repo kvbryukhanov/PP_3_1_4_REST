@@ -8,6 +8,7 @@ public class AuthController {
 
     @GetMapping("/login")
     public String loginPage() {
-        return "login"; // Это указывает Spring вернуть шаблон login.html
+        return "login";
     }
+
 }

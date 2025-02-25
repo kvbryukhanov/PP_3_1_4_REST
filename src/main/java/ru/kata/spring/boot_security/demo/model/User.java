@@ -18,28 +18,22 @@ public class User implements UserDetails {
     private int id;
 
     @NotEmpty(message = "First name cannot be empty")
-    @Column(name = "firstname")
     private String firstName;
 
     @NotEmpty(message = "Last name cannot be empty")
-    @Column(name = "lastname")
     private String lastName;
 
     @NotEmpty(message = "Username cannot be empty")
-    @Column(name = "username", unique = true)
+
+    @Column(nullable = false, unique = true)
     private String username; // Добавил имя пользователя
 
-    @NotEmpty(message = "Password cannot be empty")
-    @Column(name = "password")
     private String password; // Добавил пароль
 
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "users_roles",
+    @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id")
-    )
-
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
 
     private Set<Role> roles = new HashSet<>(); // Связь с ролями
 
@@ -105,27 +99,27 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles; // Теперь Spring Security использует роли для авторизации
+        return roles;
     }
 
     @Override
     public boolean isAccountNonExpired() {
-        return true; // Делаем активным по умолчанию
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return true; // Делаем активным по умолчанию
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return true; // Делаем активным по умолчанию
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return true; // Делаем активным по умолчанию
+        return true;
     }
 
     @Override
