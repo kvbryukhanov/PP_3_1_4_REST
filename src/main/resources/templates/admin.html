@@ -224,7 +224,6 @@
         const roles = document.getElementById('editRoles').selectedOptions.length;
 
         // Проверка заполненности полей
-        // if (!firstName || !lastName || !username || !password || roles === 0) {
         if (!firstName || !lastName || !username || roles === 0) {
             alert('Please fill in all required fields.'); // Сообщение об ошибке
         } else {
@@ -323,6 +322,13 @@
             option.selected = roles.includes(option.textContent.trim());
         }
     }
+</script>
+
+<!-- JavaScript для отправки формы удаления -->
+<script>
+    document.getElementById('submitDeleteUserForm').addEventListener('click', function () {
+        document.getElementById('deleteUserForm').submit();
+    });
 </script>
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
