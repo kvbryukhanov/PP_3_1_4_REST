@@ -24,7 +24,6 @@ public class User implements UserDetails {
     private String lastName;
 
     @NotEmpty(message = "Username cannot be empty")
-
     @Column(nullable = false, unique = true)
     private String username; // Добавил имя пользователя
 
@@ -34,7 +33,6 @@ public class User implements UserDetails {
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
-
     private Set<Role> roles = new HashSet<>(); // Связь с ролями
 
     public User() {

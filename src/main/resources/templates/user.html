@@ -33,12 +33,14 @@
 
         <div class="col-2 content_col_1">
             <!-- Показываем "Admin" только пользователям с ролью ROLE_ADMIN -->
-            <div class="p-2 text-primary" th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
-                <a id="link_admin" style="text-decoration: none;" th:href="@{/admin}">Admin</a>
+            <div class="p-2 text-primary position-relative"
+                 th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
+                <a id="link_admin" class="stretched-link text-decoration-none"
+                   th:href="@{/admin}">Admin</a>
             </div>
 
-            <div class="block_blue p-2">
-                <a id="link_user" style="text-decoration: none; color: white" th:href="@{/user}">User</a>
+            <div class="block_blue p-2 position-relative">
+                <a id="link_user" class="stretched-link text-decoration-none text-white" th:href="@{/user}">User</a>
             </div>
         </div><!-- end column 1 -->
 
@@ -46,7 +48,7 @@
             <div class="block_for_tab">
                 <h2 style="font-weight: 600;">User information-page</h2>
                 <div style="font-weight: 600;" class="border p-2">About user</div>
-                <div class="container border bg-white p-2">
+                <div class="container-fluid border bg-white p-2">
                     <table class="table">
                         <thead>
                         <tr>
@@ -76,8 +78,8 @@
         </div>
     </div>
 </div>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

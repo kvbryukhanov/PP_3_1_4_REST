@@ -31,11 +31,13 @@
     <div class="row content_row_main">
 
         <div class="col-2 content_col_1">
-            <div class="block_blue p-2" th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
-                <a id="link_admin" style="text-decoration: none; color: white" th:href="@{/admin}">Admin</a>
+            <div class="block_blue p-2 position-relative"
+                 th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
+                <a id="link_admin" class="stretched-link text-decoration-none text-white"
+                   th:href="@{/admin}">Admin</a>
             </div>
-            <div class="p-2 text-primary">
-                <a id="link_user" style="text-decoration: none;" th:href="@{/user}">User</a>
+            <div class="p-2 text-primary position-relative">
+                <a id="link_user" class="stretched-link text-decoration-none" th:href="@{/user}">User</a>
             </div>
         </div><!-- end column 1 -->
 
@@ -56,8 +58,8 @@
                         <div class="tab-pane fade show active" id="usersTable">
                             <div style="font-weight: 600;" class="border p-2 ps-3">All users</div>
 
-                            <div class="container border bg-white p-2">
-                                <table class="table table-striped">
+                            <div class="container-fluid border bg-white p-2">
+                                <table class="table table-striped p-2">
                                     <thead>
                                     <tr>
                                         <th>ID</th>
