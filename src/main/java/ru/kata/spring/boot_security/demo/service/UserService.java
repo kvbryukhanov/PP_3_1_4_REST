@@ -9,7 +9,7 @@ import java.util.Optional;
 public interface UserService extends UserDetailsService {
     List<User> index();
 
-    User show(int id);
+    Optional<User> show(int id);
 
     void save(User user);
 

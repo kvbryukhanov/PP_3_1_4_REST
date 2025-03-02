@@ -36,35 +36,35 @@ public class AdminsController {
         return "admin";
     }
 
-    @PostMapping("/create")
-    public String save(@ModelAttribute("user") @Valid User user,
-                       BindingResult bindingResult,
-                       @RequestParam("roleIds") List<Long> roleIds) {
-        if (bindingResult.hasErrors()) {
-            return "redirect:/admin";
-        }
+//    @PostMapping("/create")
+//    public String save(@ModelAttribute("user") @Valid User user,
+//                       BindingResult bindingResult,
+//                       @RequestParam("roleIds") List<Long> roleIds) {
+//        if (bindingResult.hasErrors()) {
+//            return "redirect:/admin";
+//        }
+//
+//        userService.save(user, roleIds);
+//        return "redirect:/admin"; // Редирект на страницу админ-панели
+//    }
 
-        userService.save(user, roleIds);
-        return "redirect:/admin"; // Редирект на страницу админ-панели
-    }
+//    @PostMapping("/update")
+//    public String update(@ModelAttribute("user") @Valid User user,
+//                         BindingResult bindingResult,
+//                         @RequestParam int id,
+//                         @RequestParam(value = "roleIds", required = false)
+//                         List<Long> roleIds) {
+//        if (bindingResult.hasErrors()) {
+//            return "redirect:/admin";
+//        }
+//
+//        userService.update(id, user, roleIds);
+//        return "redirect:/admin";
+//    }
 
-    @PostMapping("/update")
-    public String update(@ModelAttribute("user") @Valid User user,
-                         BindingResult bindingResult,
-                         @RequestParam int id,
-                         @RequestParam(value = "roleIds", required = false)
-                         List<Long> roleIds) {
-        if (bindingResult.hasErrors()) {
-            return "redirect:/admin";
-        }
-
-        userService.update(id, user, roleIds);
-        return "redirect:/admin";
-    }
-
-    @PostMapping(value = "/delete")
-    public String delete(@RequestParam int id) {
-        userService.delete(id);
-        return "redirect:/admin";
-    }
+//    @PostMapping(value = "/delete")
+//    public String delete(@RequestParam int id) {
+//        userService.delete(id);
+//        return "redirect:/admin";
+//    }
 }

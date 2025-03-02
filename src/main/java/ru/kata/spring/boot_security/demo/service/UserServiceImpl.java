@@ -10,6 +10,7 @@ import ru.kata.spring.boot_security.demo.DAO.UserDao;
 import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -37,7 +38,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(readOnly = true)
-    public User show(int id) {
+    public Optional<User> show(int id) {
         return userDao.show(id);
     }
 
@@ -60,23 +61,39 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void update(int id, User user, List<Long> roleIds) {
+        Optional<User> existingUserOpt = this.show(id);
 
-        User existingUser = this.show(id);
+        if (existingUserOpt.isPresent()) {
+            User existingUser = existingUserOpt.get();
 
-        if (roleIds != null) {
-            Set<Role> roles = new HashSet<>(roleService.findByIds(roleIds));
-            user.setRoles(roles);
+            // Обновляем роли
+            if (roleIds != null) {
+                Set<Role> roles = new HashSet<>(roleService.findByIds(roleIds));
+                existingUser.setRoles(roles);
+            } else {
+                existingUser.setRoles(existingUser.getRoles());
+            }
+
+            if (!user.getUsername().equals(existingUser.getUsername())) {
+                if (userDao.findUserByUsername(user.getUsername()).isPresent()) {
+                    throw new IllegalArgumentException("Username already exists.");
+                }
+                existingUser.setUsername(user.getUsername());
+            }
+
+            existingUser.setFirstName(user.getFirstName());
+            existingUser.setLastName(user.getLastName());
+
+            if (!user.getPassword().isEmpty()) {
+                existingUser.setPassword(encodePassword(user.getPassword()));
+            } else {
+                existingUser.setPassword(existingUser.getPassword());
+            }
+
+            userDao.update(id, existingUser);
         } else {
-            user.setRoles(existingUser.getRoles());
+            throw new EntityNotFoundException("User with id " + id + " not found");
         }
-
-        if (!user.getPassword().isEmpty()) {
-            user.setPassword(encodePassword(user.getPassword()));
-        } else {
-            user.setPassword(existingUser.getPassword());
-        }
-
-        userDao.update(id, user);
     }
 
     @Override
