@@ -34,7 +34,7 @@ export function createUserRow(user) {
 }
 
 // Заполняет форму редактирования
-export function fillEditForm(button) {
+export async function fillEditForm(button) {
     document.getElementById("editUserId").value = button.dataset.userId;
     document.getElementById("editFirstName").value = button.dataset.firstName;
     document.getElementById("editLastName").value = button.dataset.lastName;
@@ -42,6 +42,7 @@ export function fillEditForm(button) {
 
     let roles = button.dataset.roles.split(",");
     let roleSelect = document.getElementById("editRoles");
+
     for (let option of roleSelect.options) {
         option.selected = roles.includes(option.textContent.trim());
     }
@@ -59,6 +60,38 @@ export function fillDeleteForm(button) {
     for (let option of roleSelect.options) {
         option.selected = roles.includes(option.textContent.trim());
     }
+}
+
+// Функция для заполнения выпадающих списков ролей
+export function fillRoleSelects(roles) {
+    const editRolesSelect = document.getElementById("editRoles");
+    const deleteRolesSelect = document.getElementById("deleteRoles");
+    const rolesSelect = document.getElementById("roles"); // Добавлено для заполнения списка ролей для добавления
+
+    // Очистка текущих опций
+    editRolesSelect.innerHTML = '';
+    deleteRolesSelect.innerHTML = '';
+    rolesSelect.innerHTML = ''; // Очистка списка ролей для добавления
+
+    roles.forEach(role => {
+        // Добавление опции для редактирования
+        const editOption = document.createElement("option");
+        editOption.value = role.id;
+        editOption.textContent = role.name;
+        editRolesSelect.appendChild(editOption);
+
+        // Добавление опции для удаления
+        const deleteOption = document.createElement("option");
+        deleteOption.value = role.id;
+        deleteOption.textContent = role.name;
+        deleteRolesSelect.appendChild(deleteOption);
+
+        // Добавление опции для добавления нового пользователя
+        const addOption = document.createElement("option");
+        addOption.value = role.id;
+        addOption.textContent = role.name;
+        rolesSelect.appendChild(addOption);
+    });
 }
 
 // Отрисовывает таблицу

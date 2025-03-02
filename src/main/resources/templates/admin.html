@@ -144,10 +144,6 @@
 
                         <label for="editRoles" class="form-label">Role</label>
                         <select id="editRoles" name="roleIds" multiple required class="form-control">
-                            <option th:each="role : ${allRoles}"
-                                    th:value="${role.id}"
-                                    th:text="${role.name}">
-                            </option>
                         </select>
                         <br>
                     </div>
@@ -192,8 +188,6 @@
 
                         <label for="deleteRoles" class="form-label">Role</label>
                         <select id="deleteRoles" name="roleIds" multiple class="form-control" disabled>
-                            <option th:each="role : ${allRoles}" th:value="${role.id}" th:text="${role.name}">
-                            </option>
                         </select>
                         <br>
                     </div>

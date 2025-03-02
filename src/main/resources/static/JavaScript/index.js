@@ -1,5 +1,5 @@
 import {serverAddUser, serverDeleteUser, serverGetRoles, serverGetUsers, serverUpdateUser} from "./api.js";
-import {render} from "./ui.js";
+import {fillRoleSelects, render} from "./ui.js";
 
 document.addEventListener("DOMContentLoaded", async function () {
     //Инициализация для админа
@@ -8,13 +8,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         try {
             const roles = await serverGetRoles();
-            const rolesSelect = document.getElementById("roles");
-            roles.forEach(role => {
-                const option = document.createElement("option");
-                option.value = role.id;
-                option.textContent = role.name;
-                rolesSelect.appendChild(option);
-            });
+            fillRoleSelects(roles)
             const users = await serverGetUsers();
             render(users);
         } catch (error) {
