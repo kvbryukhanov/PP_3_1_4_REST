@@ -42,6 +42,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
                 $('#usersTab').tab('show');
 
+                document.getElementById("newUserForm").reset();
             } catch (error) {
                 console.error("Ошибка добавления пользователя:", error);
             }
